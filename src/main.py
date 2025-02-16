@@ -174,26 +174,6 @@ class GoogleDriveService:
             logger.error("An error occurred: %s", error)
             return []
 
-    def list_spaces(self) -> list:
-        """List all spaces in Google Drive.
-
-        Returns:
-            list: A list of spaces.
-        """
-        try:
-            results = self.service.spaces().list().execute()
-            items = results.get("spaces", [])
-            if not items:
-                logger.info("No spaces found.")
-                return []
-            logger.info("Spaces:")
-            for item in items:
-                logger.info("%s (%s)", item["name"], item["id"])
-            return items
-        except HttpError as error:
-            logger.error("An error occurred: %s", error)
-            return []
-
 
 def main():
     """Main function to demonstrate GoogleDriveService usage."""
