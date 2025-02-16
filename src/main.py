@@ -1,13 +1,12 @@
-import os
 import logging
-from googleapiclient.discovery import build
-from google.oauth2 import service_account
-from googleapiclient.http import MediaFileUpload
-from googleapiclient.errors import HttpError
+import os
+
+from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
-from google.auth.transport.requests import Request
-from googleapiclient.discovery import Resource
+from googleapiclient.discovery import Resource, build
+from googleapiclient.errors import HttpError
+from googleapiclient.http import MediaFileUpload
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -83,7 +82,10 @@ class GoogleDriveService:
             str: The ID of the uploaded file.
         """
         try:
-            file_metadata = {"name": os.path.basename(file_path), "parents": [folder_id]}
+            file_metadata = {
+                "name": os.path.basename(file_path),
+                "parents": [folder_id],
+            }
             media = MediaFileUpload(file_path, resumable=True)
             file = self.service.files().create(body=file_metadata, media_body=media, fields="id").execute()
             logger.info('File ID: "%s".', file.get("id"))
