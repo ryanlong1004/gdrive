@@ -1,5 +1,7 @@
 # Google Drive Service
 
+![Google Drive Service](image.png)
+
 This project provides a `GoogleDriveService` class for interacting with the Google Drive API. It includes methods for creating folders, uploading files, listing folders, listing folder contents, searching for files by MIME type, and listing all spaces in Google Drive.
 
 ## Setup
