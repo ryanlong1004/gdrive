@@ -1,0 +1,9 @@
+# This is a comment
+# Each line is a file pattern followed by one or more owners
+
+# Specify the code owners for the entire repository
+* @your-github-username
+
+# Specify the code owners for specific directories or files
+/src/ @your-github-username
+/tests/ @your-github-username
