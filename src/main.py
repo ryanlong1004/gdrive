@@ -1,5 +1,6 @@
 import logging
 import os
+from typing import List
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -28,7 +29,7 @@ class GoogleDriveService:
         Returns:
             Credentials: The authenticated user credentials.
         """
-        creds = None
+        creds: Credentials = None
         if os.path.exists("token.json"):
             return Credentials.from_authorized_user_file("token.json", SCOPES)
         if not creds or not creds.valid:
@@ -39,6 +40,7 @@ class GoogleDriveService:
                 creds = flow.run_local_server(port=0)
             with open("token.json", "w") as token:
                 token.write(creds.to_json())
+        print(type(creds))
         return creds
 
     def get_service(self) -> Resource:
@@ -47,7 +49,7 @@ class GoogleDriveService:
         Returns:
             Resource: The Google Drive service.
         """
-        credentials = self.get_credentials()
+        credentials: Credentials = self.get_credentials()
         return build("drive", "v3", credentials=credentials)
 
     def create_folder(self, name: str) -> str:
@@ -94,7 +96,7 @@ class GoogleDriveService:
             logger.error("An error occurred: %s", error)
             return ""
 
-    def list_folders(self) -> list:
+    def list_folders(self) -> List[dict]:
         """List all folders in Google Drive.
 
         Returns:
@@ -114,7 +116,7 @@ class GoogleDriveService:
             logger.error("An error occurred: %s", error)
             return []
 
-    def list_folder_contents(self, folder_id: str) -> list:
+    def list_folder_contents(self, folder_id: str) -> List[dict]:
         """List all contents of a specific folder in Google Drive.
 
         Args:
@@ -140,7 +142,7 @@ class GoogleDriveService:
             logger.error("An error occurred: %s", error)
             return []
 
-    def search_file(self, mime_type: str) -> list:
+    def search_file(self, mime_type: str) -> List[dict]:
         """Search for files in Google Drive by MIME type.
 
         Args:
@@ -150,8 +152,8 @@ class GoogleDriveService:
             list: A list of files matching the MIME type.
         """
         try:
-            files = []
-            page_token = None
+            files: List[dict] = []
+            page_token: str = None
             while True:
                 response = (
                     self.service.files()
@@ -175,7 +177,7 @@ class GoogleDriveService:
             return []
 
 
-def main():
+def main() -> None:
     """Main function to demonstrate GoogleDriveService usage."""
     service = GoogleDriveService()
     folders = service.list_folders()
